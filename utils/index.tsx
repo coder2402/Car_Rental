@@ -17,6 +17,8 @@ export async function fetchCars(filters: FilterProps){
     return result;
 }
 
+const currentYear = new Date().getFullYear();
+
 export const calculateCarRent = (city_mpg: number, year: number) => {
     const basePricePerDay = 50; 
     const mileageFactor = 0.1; 
@@ -24,7 +26,7 @@ export const calculateCarRent = (city_mpg: number, year: number) => {
   
     // Calculate additional rate based on mileage and age
     const mileageRate = city_mpg * mileageFactor;
-    const ageRate = (new Date().getFullYear() - year) * ageFactor;
+    const ageRate = (currentYear - year) * ageFactor;
   
     // Calculate total rental rate per day
     const rentalRatePerDay = basePricePerDay + mileageRate + ageRate;
