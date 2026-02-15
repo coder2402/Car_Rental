@@ -8,9 +8,10 @@ import {calculateCarRent, generateCarImageUrl} from '@/utils';
 
 interface CarCardProps {
     car : CarProps;
+    priority?: boolean;
 }
 
-const CarCard = ({car}: CarCardProps) => {
+const CarCard = ({car, priority = false}: CarCardProps) => {
     const { city_mpg, year, make, model, transmission, drive } = car;
     const carRent = calculateCarRent(city_mpg, year);
     const [isOpen, setIsOpen] = useState(false)
@@ -30,7 +31,7 @@ const CarCard = ({car}: CarCardProps) => {
       </p>
 
       <div className='relative w-full h-40 my-3 object-contain'>
-        <Image src={generateCarImageUrl(car)} alt='car model' fill priority className='object-contain'/>
+        <Image src={generateCarImageUrl(car)} alt='car model' fill priority={priority} className='object-contain'/>
       </div>
 
       <div className="relative flex w-full mt-2">
