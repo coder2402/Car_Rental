@@ -3,8 +3,11 @@ import React from 'react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { CarProps } from '@/types'
-import { CarDetails, CustomButton } from '.'
-import {calculateCarRent, generateCarImageUrl} from '@/utils';
+import { calculateCarRent, generateCarImageUrl } from '@/utils';
+import CustomButton from './cutomButton';
+import dynamic from 'next/dynamic';
+
+const CarDetails = dynamic(() => import('./CarDetails'));
 
 interface CarCardProps {
     car : CarProps;
@@ -14,7 +17,8 @@ interface CarCardProps {
 const CarCard = ({car, priority = false}: CarCardProps) => {
     const { city_mpg, year, make, model, transmission, drive } = car;
     const carRent = calculateCarRent(city_mpg, year);
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
+    const [hasOpened, setHasOpened] = useState(false);
 
   return (
     <div className="car-card group">
@@ -62,11 +66,16 @@ const CarCard = ({car, priority = false}: CarCardProps) => {
             containerStyles='w-full py-[16px] rounded-full bg-primary-blue'
             textStyles='text-white text-[14px] leading-[17px] font-bold'
             rightIcon='/right-arrow.svg'
-            handleClick={() => setIsOpen(true)}
+            handleClick={() => {
+              setIsOpen(true);
+              setHasOpened(true);
+            }}
           />
         </div>
       </div>
-      <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} />
+      {(isOpen || hasOpened) && (
+        <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} />
+      )}
     </div>
   )
 }
