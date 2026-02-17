@@ -23,7 +23,14 @@ const Hero = () => {
 
         <div className="hero__image-container">
             <div className="hero__image">
-                <Image src="/hero.png" alt='hero' fill className='object-contain'/>
+                <Image
+                    src="/hero.png"
+                    alt='hero'
+                    fill
+                    priority // Optimize LCP: Hints browser to preload this image
+                    sizes="(max-width: 1280px) 90vw, (max-width: 1440px) 60vw, 864px" // Optimize LCP: Helps browser select correct image size based on layout
+                    className='object-contain'
+                />
             </div>
             <div className='hero__image-overlay' />
         </div>
