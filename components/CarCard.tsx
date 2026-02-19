@@ -20,8 +20,13 @@ const CarCard = ({car, priority = false}: CarCardProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [hasOpened, setHasOpened] = useState(false);
 
+    // optimize: preload CarDetails chunk on hover
+    const preloadCarDetails = () => {
+      import('./CarDetails');
+    };
+
   return (
-    <div className="car-card group">
+    <div className="car-card group" onMouseEnter={preloadCarDetails}>
       <div className="car-card__content">
         <h2 className="car-card__content-title">
           {make} {model}
