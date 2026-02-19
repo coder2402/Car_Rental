@@ -15,13 +15,22 @@ export async function fetchCars(filters: FilterProps){
     url.searchParams.append('limit', `${limit}`);
     url.searchParams.append('fuel_type', `${fuel}`);
 
-    const response = await fetch(url.toString(), {
-        headers: headers,
-    });
+    try {
+        const response = await fetch(url.toString(), {
+            headers: headers,
+        });
 
-    const result = await response.json();
+        if (!response.ok) {
+            return { message: `Failed to fetch cars: ${response.status} ${response.statusText}` };
+        }
 
-    return result;
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        console.error("Error fetching cars:", error);
+        return { message: "An error occurred while fetching cars. Please try again later." };
+    }
 }
 
 const currentYear = new Date().getFullYear();

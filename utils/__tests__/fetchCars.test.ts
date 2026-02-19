@@ -7,6 +7,7 @@ describe('fetchCars', () => {
 
     beforeEach(() => {
         fetchMock = mock(() => Promise.resolve({
+            ok: true,
             json: () => Promise.resolve([])
         }));
         global.fetch = fetchMock;
@@ -14,6 +15,37 @@ describe('fetchCars', () => {
 
     afterEach(() => {
         global.fetch = undefined as any;
+    });
+
+    test('should return error message when fetch rejects', async () => {
+        fetchMock.mockImplementation(() => Promise.reject(new Error('Network error')));
+
+        const result = await fetchCars({ manufacturer: 'Toyota' });
+
+        expect(result).toEqual({ message: "An error occurred while fetching cars. Please try again later." });
+    });
+
+    test('should return error message when response is not ok', async () => {
+        fetchMock.mockImplementation(() => Promise.resolve({
+            ok: false,
+            status: 500,
+            statusText: 'Internal Server Error'
+        }));
+
+        const result = await fetchCars({ manufacturer: 'Toyota' });
+
+        expect(result).toEqual({ message: "Failed to fetch cars: 500 Internal Server Error" });
+    });
+
+    test('should return error message when json parsing fails', async () => {
+        fetchMock.mockImplementation(() => Promise.resolve({
+            ok: true,
+            json: () => Promise.reject(new Error('Invalid JSON'))
+        }));
+
+        const result = await fetchCars({ manufacturer: 'Toyota' });
+
+        expect(result).toEqual({ message: "An error occurred while fetching cars. Please try again later." });
     });
 
     test('should properly encode special characters in query parameters', async () => {
