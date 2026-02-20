@@ -8,6 +8,7 @@ export interface CustomButtonProps {
     textStyles?: string;
     rightIcon?: string;
     isDiabled?: boolean;
+    onMouseEnter?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export interface SearchManuFacturerProps {
