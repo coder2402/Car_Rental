@@ -5,13 +5,14 @@ import Image from 'next/image'
 import { CustomButtonProps } from '@/types';
 
 
-const CutomButton = ({title, containerStyles, handleClick, btnType, textStyles, rightIcon}: CustomButtonProps) => {
+const CutomButton = ({title, containerStyles, handleClick, btnType, textStyles, rightIcon, onMouseEnter}: CustomButtonProps) => {
   return (
     <button
         disabled={false}
         type={btnType || "button"}
         className={`custom-btn ${containerStyles}`}
         onClick={handleClick}
+        onMouseEnter={onMouseEnter}
     >
         <span className={`flex-1 ${textStyles}`}>
             {title }

@@ -20,6 +20,11 @@ const CarCard = ({car, priority = false}: CarCardProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [hasOpened, setHasOpened] = useState(false);
 
+    const preloadCarDetails = () => {
+      // Preload the CarDetails chunk
+      import('./CarDetails');
+    };
+
   return (
     <div className="car-card group">
       <div className="car-card__content">
@@ -77,6 +82,7 @@ const CarCard = ({car, priority = false}: CarCardProps) => {
               setIsOpen(true);
               setHasOpened(true);
             }}
+            onMouseEnter={preloadCarDetails}
           />
         </div>
       </div>
