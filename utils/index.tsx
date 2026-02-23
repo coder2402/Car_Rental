@@ -71,3 +71,16 @@ export const updateSearchParams = (type: string, value: string) => {
   
     return newPathname;
   };
+
+export const filterManufacturers = (query: string, manufacturers: string[]) => {
+    if (!query) return manufacturers;
+
+    const normalizedQuery = query.toLowerCase().replace(/\s+/g, "");
+
+    return manufacturers.filter((item) =>
+        item
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(normalizedQuery)
+    );
+};

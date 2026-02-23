@@ -11,3 +11,7 @@
 ## 2024-05-25 - Optimizing Modal Images
 **Learning:** Images inside fixed-width modals often default to `100vw` without `sizes`, causing massive over-fetching on high-res screens.
 **Action:** Always add `sizes` relative to the modal's max-width (e.g., `(max-width: 640px) 100vw, 512px` for a `max-w-lg` modal).
+
+## 2024-05-26 - Optimizing Filter Loops
+**Learning:** Filtering arrays inside render loops with complex operations (like regex creation) on every item is a common performance anti-pattern.
+**Action:** Lift the query transformation out of the loop or extract the entire filtering logic to a pure function that can be optimized and tested independently.
