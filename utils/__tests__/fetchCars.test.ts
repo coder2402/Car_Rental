@@ -87,4 +87,20 @@ describe('fetchCars', () => {
         expect(calledUrl).toContain('limit=5');
         expect(calledUrl).toContain('fuel_type=hybrid');
     });
+
+    test('should include next revalidate option in fetch call', async () => {
+        const filters: FilterProps = {
+            manufacturer: 'Toyota',
+            year: 2023,
+            model: 'Camry',
+            limit: 5,
+            fuel: 'hybrid'
+        };
+
+        await fetchCars(filters);
+
+        const options = fetchMock.mock.calls[0][1];
+        expect(options).toHaveProperty('next');
+        expect(options.next).toEqual({ revalidate: 86400 });
+    });
 });

@@ -18,6 +18,8 @@ export async function fetchCars(filters: FilterProps){
     try {
         const response = await fetch(url.toString(), {
             headers: headers,
+            // Cache API response for 24h to reduce API calls and improve load time
+            next: { revalidate: 86400 },
         });
 
         if (!response.ok) {
