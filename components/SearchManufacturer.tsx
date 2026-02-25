@@ -6,18 +6,26 @@ import Image from 'next/image'
 import { useState, Fragment } from 'react'
 import { manufacturers } from '@/constants'
 
+// Optimization: Pre-calculate normalized values to avoid re-computing on every render
+const normalizedManufacturers = manufacturers.map((manufacturer) => ({
+  original: manufacturer,
+  normalized: manufacturer.toLowerCase().replace(/\s+/g, ""),
+}));
+
 const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
     const [query,setQuery] = useState('')
+
+    // Optimization: Normalize query once per render, not for every item
+    const normalizedQuery = query.toLowerCase().replace(/\s+/g, "");
 
     const filteredManufacturers =
     query === ""
       ? manufacturers
-      : manufacturers.filter((item) =>
-          item
-            .toLowerCase()
-            .replace(/\s+/g, "")
-            .includes(query.toLowerCase().replace(/\s+/g, ""))
-        );
+      : normalizedManufacturers
+          .filter((item) =>
+            item.normalized.includes(normalizedQuery)
+          )
+          .map((item) => item.original);
 
   return (
     <div className='search-manufacturer'>
