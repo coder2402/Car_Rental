@@ -71,3 +71,7 @@ export const updateSearchParams = (type: string, value: string) => {
   
     return newPathname;
   };
+
+export const checkIsDataEmpty = (allCars: any) => {
+  return !Array.isArray(allCars) || allCars.length < 1 || !allCars;
+};
