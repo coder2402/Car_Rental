@@ -87,4 +87,55 @@ describe('fetchCars', () => {
         expect(calledUrl).toContain('limit=5');
         expect(calledUrl).toContain('fuel_type=hybrid');
     });
+
+    describe('validation', () => {
+        test('should return error for invalid manufacturer (too long)', async () => {
+            const result = await fetchCars({ manufacturer: 'a'.repeat(101) });
+            expect(result).toEqual({ message: "Invalid manufacturer" });
+        });
+
+        test('should return error for invalid model (too long)', async () => {
+            const result = await fetchCars({ model: 'a'.repeat(101) });
+            expect(result).toEqual({ message: "Invalid model" });
+        });
+
+        test('should return error for invalid fuel type (too long)', async () => {
+            const result = await fetchCars({ fuel: 'a'.repeat(101) });
+            expect(result).toEqual({ message: "Invalid fuel type" });
+        });
+
+        test('should return error for invalid year (too small)', async () => {
+            const result = await fetchCars({ year: 1884 });
+            expect(result).toEqual({ message: "Invalid year" });
+        });
+
+        test('should return error for invalid year (too large)', async () => {
+            const result = await fetchCars({ year: 2101 });
+            expect(result).toEqual({ message: "Invalid year" });
+        });
+
+        test('should return error for invalid limit (too small)', async () => {
+            const result = await fetchCars({ limit: 0 });
+            expect(result).toEqual({ message: "Invalid limit" });
+        });
+
+        test('should return error for invalid limit (too large)', async () => {
+            const result = await fetchCars({ limit: 51 });
+            expect(result).toEqual({ message: "Invalid limit" });
+        });
+
+        test('should handle numeric strings for year and limit', async () => {
+            // @ts-ignore
+            await fetchCars({ year: '2022', limit: '10' });
+            const calledUrl = fetchMock.mock.calls[0][0];
+            expect(calledUrl).toContain('year=2022');
+            expect(calledUrl).toContain('limit=10');
+        });
+
+        test('should return error for non-numeric strings for year', async () => {
+            // @ts-ignore
+            const result = await fetchCars({ year: 'abc' });
+            expect(result).toEqual({ message: "Invalid year" });
+        });
+    });
 });

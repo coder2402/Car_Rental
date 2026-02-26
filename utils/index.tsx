@@ -3,17 +3,31 @@ import { CarProps, FilterProps } from "@/types";
 export async function fetchCars(filters: FilterProps){
     const {manufacturer, year, model, limit, fuel} = filters;
 
+    // Validation
+    const isValidString = (val: any) => typeof val === 'string' && val.length <= 100;
+    const isValidNumber = (val: any, min: number, max: number) => {
+        const num = typeof val === 'number' ? val : parseInt(val as string);
+        return !isNaN(num) && num >= min && num <= max;
+    };
+
+    if (manufacturer !== undefined && !isValidString(manufacturer)) return { message: "Invalid manufacturer" };
+    if (model !== undefined && !isValidString(model)) return { message: "Invalid model" };
+    if (fuel !== undefined && !isValidString(fuel)) return { message: "Invalid fuel type" };
+    if (year !== undefined && !isValidNumber(year, 1885, 2100)) return { message: "Invalid year" };
+    if (limit !== undefined && !isValidNumber(limit, 1, 50)) return { message: "Invalid limit" };
+
     const headers = {
         'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
 		'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com'
     }
 
     const url = new URL("https://cars-by-api-ninjas.p.rapidapi.com/v1/cars");
-    url.searchParams.append('make', `${manufacturer}`);
-    url.searchParams.append('year', `${year}`);
-    url.searchParams.append('model', `${model}`);
-    url.searchParams.append('limit', `${limit}`);
-    url.searchParams.append('fuel_type', `${fuel}`);
+
+    if (manufacturer) url.searchParams.append('make', manufacturer);
+    if (year) url.searchParams.append('year', `${year}`);
+    if (model) url.searchParams.append('model', model);
+    if (limit) url.searchParams.append('limit', `${limit}`);
+    if (fuel) url.searchParams.append('fuel_type', fuel);
 
     try {
         const response = await fetch(url.toString(), {
