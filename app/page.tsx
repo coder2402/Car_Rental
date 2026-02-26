@@ -1,6 +1,6 @@
 import { SearchBar, CustomFilter, Hero, CarCard, ShowMore } from '@/components'
 import Image from 'next/image'
-import { fetchCars } from "@/utils";
+import { fetchCars, checkIsDataEmpty } from "@/utils";
 import { HomeProps } from '@/types';
 import { fuels, yearsOfProduction } from '@/constants';
 
@@ -14,7 +14,7 @@ export default async function Home({searchParams}: HomeProps) {
     model: searchParams.model || "",
   });
 
-  const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
+  const isDataEmpty = checkIsDataEmpty(allCars);
 
   return (
     <main className="overflow-hidden">
