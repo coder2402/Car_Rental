@@ -87,7 +87,12 @@ const CarCard = ({car, priority = false}: CarCardProps) => {
         </div>
       </div>
       {(isOpen || hasOpened) && (
-        <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} />
+        <CarDetails
+          isOpen={isOpen}
+          closeModal={() => setIsOpen(false)}
+          car={car}
+          cleanup={() => setHasOpened(false)}
+        />
       )}
     </div>
   )

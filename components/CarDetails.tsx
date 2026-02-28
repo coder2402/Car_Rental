@@ -11,12 +11,13 @@ interface CarDetailsProps{
   isOpen: boolean;
   closeModal: () => void;
   car: CarProps;
+  cleanup?: () => void;
 }
 
-const CarDetails = ({isOpen, closeModal, car}: CarDetailsProps) => {
+const CarDetails = ({isOpen, closeModal, car, cleanup}: CarDetailsProps) => {
   return (
     <>
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={isOpen} as={Fragment} afterLeave={cleanup}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
           as={Fragment}

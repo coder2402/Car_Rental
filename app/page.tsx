@@ -1,7 +1,7 @@
 import { SearchBar, CustomFilter, Hero, CarCard, ShowMore } from '@/components'
 import Image from 'next/image'
 import { fetchCars, checkIsDataEmpty } from "@/utils";
-import { HomeProps } from '@/types';
+import { HomeProps, CarProps } from '@/types';
 import { fuels, yearsOfProduction } from '@/constants';
 
 
@@ -38,7 +38,7 @@ export default async function Home({searchParams}: HomeProps) {
       {!isDataEmpty ? (
         <section>
           <div className='home__cars-wrapper'>
-              {allCars?.map((car, index) => (
+              {allCars?.map((car: CarProps, index: number) => (
                 <CarCard
                   key={index}
                   car={car}
