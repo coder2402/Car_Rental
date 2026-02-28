@@ -12,20 +12,22 @@ const normalizedManufacturers = manufacturers.map((manufacturer) => ({
   normalized: manufacturer.toLowerCase().replace(/\s+/g, ""),
 }));
 
-const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
+const SearchManufacturer = React.memo(({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
     const [query,setQuery] = useState('')
 
-    // Optimization: Normalize query once per render, not for every item
-    const normalizedQuery = query.toLowerCase().replace(/\s+/g, "");
+    // ⚡ Bolt Optimization: Memoize filtered results and component
+    // 1. React.memo prevents re-renders when parent's 'model' input changes
+    // 2. useMemo prevents re-filtering when component re-renders for other reasons (like 'manufacturer' prop update)
+    const filteredManufacturers = React.useMemo(() => {
+        if (query === "") return manufacturers;
 
-    const filteredManufacturers =
-    query === ""
-      ? manufacturers
-      : normalizedManufacturers
+        const normalizedQuery = query.toLowerCase().replace(/\s+/g, "");
+        return normalizedManufacturers
           .filter((item) =>
             item.normalized.includes(normalizedQuery)
           )
           .map((item) => item.original);
+    }, [query]);
 
   return (
     <div className='search-manufacturer'>
@@ -95,6 +97,8 @@ const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerPr
         </Combobox>
     </div>
   )
-}
+});
+
+SearchManufacturer.displayName = 'SearchManufacturer';
 
 export default SearchManufacturer
