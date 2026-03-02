@@ -3,7 +3,7 @@ import { SearchManuFacturerProps } from '@/types'
 import React from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import Image from 'next/image'
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useMemo } from 'react'
 import { manufacturers } from '@/constants'
 
 // Optimization: Pre-calculate normalized values to avoid re-computing on every render
@@ -12,20 +12,22 @@ const normalizedManufacturers = manufacturers.map((manufacturer) => ({
   normalized: manufacturer.toLowerCase().replace(/\s+/g, ""),
 }));
 
-const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
+// Optimization: Wrap in React.memo to prevent re-rendering when the parent form
+// updates state for *other* fields (like the 'model' input in SearchBar).
+const SearchManufacturer = React.memo(({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
     const [query,setQuery] = useState('')
 
     // Optimization: Normalize query once per render, not for every item
     const normalizedQuery = query.toLowerCase().replace(/\s+/g, "");
 
-    const filteredManufacturers =
-    query === ""
-      ? manufacturers
-      : normalizedManufacturers
-          .filter((item) =>
-            item.normalized.includes(normalizedQuery)
-          )
-          .map((item) => item.original);
+    // Optimization: Memoize the filtered array so it doesn't recalculate when
+    // parent components (like SearchBar) re-render due to changes in other inputs.
+    const filteredManufacturers = useMemo(() => {
+      if (query === "") return manufacturers;
+      return normalizedManufacturers
+        .filter((item) => item.normalized.includes(normalizedQuery))
+        .map((item) => item.original);
+    }, [query, normalizedQuery]);
 
   return (
     <div className='search-manufacturer'>
@@ -95,6 +97,6 @@ const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerPr
         </Combobox>
     </div>
   )
-}
+})
 
 export default SearchManufacturer
