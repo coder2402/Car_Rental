@@ -14,7 +14,9 @@ interface CarCardProps {
     priority?: boolean;
 }
 
-const CarCard = ({car, priority = false}: CarCardProps) => {
+// Optimization: Prevent unnecessary re-renders when parent Server Component passes new car object references
+// on searchParams changes (e.g. pagination, filtering)
+const CarCard = React.memo(({car, priority = false}: CarCardProps) => {
     const { city_mpg, year, make, model, transmission, drive } = car;
     const carRent = calculateCarRent(city_mpg, year);
     const [isOpen, setIsOpen] = useState(false);
@@ -96,6 +98,19 @@ const CarCard = ({car, priority = false}: CarCardProps) => {
       )}
     </div>
   )
-}
+}, (prevProps, nextProps) => {
+  // Custom equality check: only compare primitive values of the car object
+  // since Next.js re-fetches and creates new object references on every searchParams change
+  return (
+    prevProps.priority === nextProps.priority &&
+    prevProps.car.make === nextProps.car.make &&
+    prevProps.car.model === nextProps.car.model &&
+    prevProps.car.year === nextProps.car.year &&
+    prevProps.car.city_mpg === nextProps.car.city_mpg &&
+    prevProps.car.transmission === nextProps.car.transmission &&
+    prevProps.car.drive === nextProps.car.drive &&
+    prevProps.car.fuel_type === nextProps.car.fuel_type
+  );
+})
 
 export default CarCard

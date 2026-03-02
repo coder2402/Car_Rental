@@ -18,3 +18,7 @@
 ## 2024-05-27 - Unmounting Closed Modals
 **Learning:** Headless UI Dialogs combined with state flags like `hasOpened` can keep heavy components mounted forever even when hidden.
 **Action:** Use the `afterLeave` prop on the `Transition` component to trigger a cleanup callback that resets the `hasOpened` state, forcing the component to unmount and free memory.
+
+## 2024-05-28 - Next.js App Router Data Re-fetching
+**Learning:** Updating `searchParams` via Next.js `router.push()` triggers a re-fetch of the Server Component, which then passes completely new object references (arrays, objects) down to all Client Components, destroying any default shallow-equality optimizations.
+**Action:** When a Client Component renders a large list based on Server Component data (like `CarCard`), wrap the component in `React.memo` and explicitly define a custom `arePropsEqual` function to check primitive values instead of object references to prevent O(N) re-renders when "Show More" or filters are used. Also, use `{scroll: false}` in `router.push()` calls for pagination/filtering to avoid disruptive layout shifts to the top of the page.
