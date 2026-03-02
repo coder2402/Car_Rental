@@ -22,3 +22,7 @@
 ## 2024-05-28 - Next.js App Router Data Re-fetching
 **Learning:** Updating `searchParams` via Next.js `router.push()` triggers a re-fetch of the Server Component, which then passes completely new object references (arrays, objects) down to all Client Components, destroying any default shallow-equality optimizations.
 **Action:** When a Client Component renders a large list based on Server Component data (like `CarCard`), wrap the component in `React.memo` and explicitly define a custom `arePropsEqual` function to check primitive values instead of object references to prevent O(N) re-renders when "Show More" or filters are used. Also, use `{scroll: false}` in `router.push()` calls for pagination/filtering to avoid disruptive layout shifts to the top of the page.
+
+## 2024-05-29 - Isolating Re-renders in Multi-Input Forms
+**Learning:** A parent component (`SearchBar`) managing state for multiple distinct inputs (`model` and `manufacturer`) will cause all child input components to re-render on every keystroke. Even if a child component (`SearchManufacturer`) manages its own local state for complex interactions (like a Combobox), it will still re-render and re-compute when the parent's *other* state changes.
+**Action:** Use `React.memo` on child components in a multi-input form if they contain complex UI (like Headless UI components) or computations (like array filtering) to isolate re-renders to only the input being typed in. Also use `useMemo` for derived lists to prevent recalculation.
