@@ -103,4 +103,19 @@ describe('fetchCars', () => {
         expect(options).toHaveProperty('next');
         expect(options.next).toEqual({ revalidate: 86400 });
     });
+
+    test('should include correct headers including RapidAPI key', async () => {
+        const originalKey = process.env.RAPID_API_KEY;
+        process.env.RAPID_API_KEY = 'test-rapid-api-key';
+
+        try {
+            await fetchCars({ manufacturer: 'Toyota' });
+
+            const options = fetchMock.mock.calls[0][1];
+            expect(options.headers).toHaveProperty('X-RapidAPI-Key', 'test-rapid-api-key');
+            expect(options.headers).toHaveProperty('X-RapidAPI-Host', 'cars-by-api-ninjas.p.rapidapi.com');
+        } finally {
+            process.env.RAPID_API_KEY = originalKey;
+        }
+    });
 });
