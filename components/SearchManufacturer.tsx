@@ -1,5 +1,5 @@
 "use client"
-import { SearchManuFacturerProps } from '@/types'
+import { SearchManufacturerProps } from '@/types'
 import React from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import Image from 'next/image'
@@ -12,7 +12,7 @@ const normalizedManufacturers = manufacturers.map((manufacturer) => ({
   normalized: manufacturer.toLowerCase().replace(/\s+/g, ""),
 }));
 
-const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
+const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManufacturerProps) => {
     const [query,setQuery] = useState('')
 
     // Optimization: Normalize query once per render, not for every item

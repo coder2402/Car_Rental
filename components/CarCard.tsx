@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { CarProps } from '@/types'
 import { calculateCarRent, generateCarImageUrl } from '@/utils';
-import CustomButton from './cutomButton';
+import CustomButton from './customButton';
 import dynamic from 'next/dynamic';
 
 const CarDetails = dynamic(() => import('./CarDetails'));

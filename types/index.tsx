@@ -7,11 +7,11 @@ export interface CustomButtonProps {
     btnType?: "button" | "submit";
     textStyles?: string;
     rightIcon?: string;
-    isDiabled?: boolean;
+    isDisabled?: boolean;
     onMouseEnter?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export interface SearchManuFacturerProps {
+export interface SearchManufacturerProps {
     manufacturer: string;
     setManufacturer: (manufacturer: string) => void;
   }

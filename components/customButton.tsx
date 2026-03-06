@@ -5,10 +5,10 @@ import Image from 'next/image'
 import { CustomButtonProps } from '@/types';
 
 
-const CutomButton = ({title, containerStyles, handleClick, btnType, textStyles, rightIcon, onMouseEnter}: CustomButtonProps) => {
+const CustomButton = ({title, containerStyles, handleClick, btnType, textStyles, rightIcon, isDisabled, onMouseEnter}: CustomButtonProps) => {
   return (
     <button
-        disabled={false}
+        disabled={isDisabled}
         type={btnType || "button"}
         className={`custom-btn ${containerStyles}`}
         onClick={handleClick}
@@ -32,4 +32,4 @@ const CutomButton = ({title, containerStyles, handleClick, btnType, textStyles, 
   )
 }
 
-export default CutomButton;
+export default CustomButton;
