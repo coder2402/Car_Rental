@@ -3,7 +3,7 @@ import { SearchManuFacturerProps } from '@/types'
 import React from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import Image from 'next/image'
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useMemo } from 'react'
 import { manufacturers } from '@/constants'
 
 // Optimization: Pre-calculate normalized values to avoid re-computing on every render
@@ -12,20 +12,22 @@ const normalizedManufacturers = manufacturers.map((manufacturer) => ({
   normalized: manufacturer.toLowerCase().replace(/\s+/g, ""),
 }));
 
-const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
+// Optimization: Wrap with React.memo to prevent unnecessary re-renders
+// when parent component (SearchBar) state changes (e.g. typing in the 'model' input)
+const SearchManufacturer = React.memo(({manufacturer, setManufacturer}:SearchManuFacturerProps) => {
     const [query,setQuery] = useState('')
 
-    // Optimization: Normalize query once per render, not for every item
-    const normalizedQuery = query.toLowerCase().replace(/\s+/g, "");
+    // Optimization: Memoize filtered array to prevent re-filtering on every render
+    const filteredManufacturers = useMemo(() => {
+        if (query === "") return manufacturers;
 
-    const filteredManufacturers =
-    query === ""
-      ? manufacturers
-      : normalizedManufacturers
-          .filter((item) =>
-            item.normalized.includes(normalizedQuery)
-          )
-          .map((item) => item.original);
+        // Normalize query once per filter operation
+        const normalizedQuery = query.toLowerCase().replace(/\s+/g, "");
+
+        return normalizedManufacturers
+            .filter((item) => item.normalized.includes(normalizedQuery))
+            .map((item) => item.original);
+    }, [query]);
 
   return (
     <div className='search-manufacturer'>
@@ -95,6 +97,6 @@ const SearchManufacturer = ({manufacturer, setManufacturer}:SearchManuFacturerPr
         </Combobox>
     </div>
   )
-}
+})
 
 export default SearchManufacturer
