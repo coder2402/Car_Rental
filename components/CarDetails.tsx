@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useMemo } from 'react'
 import { CarProps } from '@/types';
 import Image from 'next/image';
 import { Fragment } from 'react';
@@ -15,6 +15,13 @@ interface CarDetailsProps{
 }
 
 const CarDetails = ({isOpen, closeModal, car, cleanup}: CarDetailsProps) => {
+  const carDetails = useMemo(() =>
+    Object.entries(car).map(([key, value]) => ({
+      key,
+      label: key.split("_").join(" "),
+      value
+    })), [car]);
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment} afterLeave={cleanup}>
@@ -81,10 +88,10 @@ const CarDetails = ({isOpen, closeModal, car, cleanup}: CarDetailsProps) => {
                   </h2>
 
                   <div className='mt-3 flex flex-wrap gap-4'>
-                    {Object.entries(car).map(([key, value]) => (
+                    {carDetails.map(({ key, label, value }) => (
                       <div className='flex justify-between gap-5 w-full text-right' key={key} >
                         <h4 className='text-grey capitalize'>
-                          {key.split("_").join(" ")}
+                          {label}
                         </h4>
                         <p className='text-black-100 font-semibold'>
                           {value}
