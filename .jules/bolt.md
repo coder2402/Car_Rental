@@ -22,3 +22,7 @@
 ## 2024-05-28 - Next.js App Router Data Re-fetching
 **Learning:** Updating `searchParams` via Next.js `router.push()` triggers a re-fetch of the Server Component, which then passes completely new object references (arrays, objects) down to all Client Components, destroying any default shallow-equality optimizations.
 **Action:** When a Client Component renders a large list based on Server Component data (like `CarCard`), wrap the component in `React.memo` and explicitly define a custom `arePropsEqual` function to check primitive values instead of object references to prevent O(N) re-renders when "Show More" or filters are used. Also, use `{scroll: false}` in `router.push()` calls for pagination/filtering to avoid disruptive layout shifts to the top of the page.
+
+## 2024-05-29 - Optimizing Global Fonts
+**Learning:** Using `@import` for Google Fonts inside global CSS files blocks rendering and hurts FCP/LCP. While `next/font/google` fixes this, applying it requires injecting a CSS variable in the layout and mapping it in `tailwind.config.js` to replace the global `*` selector font assignment properly.
+**Action:** Always use Next.js built-in font optimization. Map the font variable to the Tailwind `sans` family and apply it to the `body` tag to match the behavior of global wildcard font rules without layout shifting. Ensure cleanup of unwanted lock files (like `bun.lock`) and test scripts before submitting.
