@@ -1,5 +1,8 @@
 import { Footer, Navbar } from '@/components'
+import { Manrope } from 'next/font/google'
 import './globals.css'
+
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' })
 
 export const metadata = {
   title: 'Car Rental',
@@ -13,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="relative">
+      <body className={`relative ${manrope.variable}`}>
         <Navbar />
         {children}
         <Footer />
