@@ -1,5 +1,5 @@
 "use client"
-import React, { useMemo } from 'react'
+import React from 'react'
 import { CarProps } from '@/types';
 import Image from 'next/image';
 import { Fragment } from 'react';
@@ -15,12 +15,14 @@ interface CarDetailsProps{
 }
 
 const CarDetails = ({isOpen, closeModal, car, cleanup}: CarDetailsProps) => {
-  const carDetails = useMemo(() =>
-    Object.entries(car).map(([key, value]) => ({
+  // Optimization: Removed unnecessary useMemo for mapping Object.entries.
+  // For small objects like car, the overhead of React's useMemo (memory allocation, dependency array comparison)
+  // is slower than simply re-computing the map on render.
+  const carDetails = Object.entries(car).map(([key, value]) => ({
       key,
       label: key.split("_").join(" "),
       value
-    })), [car]);
+    }));
 
   return (
     <>

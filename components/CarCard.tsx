@@ -113,4 +113,6 @@ const CarCard = React.memo(({car, priority = false}: CarCardProps) => {
   );
 })
 
+CarCard.displayName = "CarCard";
+
 export default CarCard
