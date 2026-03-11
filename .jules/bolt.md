@@ -26,3 +26,11 @@
 ## 2024-05-29 - Font Loading Optimization in Next.js
 **Learning:** Using `@import` in global CSS for Google Fonts causes render-blocking, increasing First Contentful Paint (FCP) and Cumulative Layout Shift (CLS).
 **Action:** Replace `@import` with `next/font/google`. Configure the font with a CSS variable (e.g., `variable: '--font-manrope'`), apply it to the body tag in `layout.tsx`, and map it within `tailwind.config.js` to avoid network waterfalls and optimize layout stability.
+
+## 2024-05-30 - Internal Barrel File Imports in Next.js
+**Learning:** Using internal barrel file imports (e.g. `import { Component } from '.'`) within a directory like `components/` can cause circular dependencies and unintended module bundling in Next.js environments, leading to larger bundle sizes.
+**Action:** Replace internal barrel file imports with direct file imports (e.g. `import Component from './Component'`).
+
+## 2024-05-30 - Unnecessary `useMemo` Overhead
+**Learning:** Wrapping simple operations, like `Object.entries(car).map(...)` in `CarDetails.tsx`, in a `useMemo` hook introduces unnecessary overhead (memory allocation, dependency array comparison) that is actually slower than simply re-computing the map on render for small objects.
+**Action:** Avoid micro-optimizations like `useMemo` for simple, inexpensive operations; they can negatively impact rendering performance.

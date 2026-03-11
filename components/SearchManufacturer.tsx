@@ -63,7 +63,7 @@ const SearchManufacturer = React.memo(({manufacturer, setManufacturer}:SearchMan
                         value={query}
                         className='search-manufacturer__option'
                         >
-                        Create "{query}"
+                        Create &quot;{query}&quot;
                         </Combobox.Option>
                     ) : (
                         filteredManufacturers.map((item) => (
@@ -98,5 +98,7 @@ const SearchManufacturer = React.memo(({manufacturer, setManufacturer}:SearchMan
     </div>
   )
 })
+
+SearchManufacturer.displayName = "SearchManufacturer";
 
 export default SearchManufacturer
